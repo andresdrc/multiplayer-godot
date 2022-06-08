@@ -1,0 +1,95 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://UI_network/UI_network.gd" type="Script" id=1]
+[ext_resource path="res://UI_network/Tema_ui_network.tres" type="Theme" id=2]
+
+[node name="UI_network" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 680.0
+margin_bottom = 480.0
+custom_constants/separation = 20
+
+[node name="mi_ip" type="Label" parent="MarginContainer/VBoxContainer"]
+margin_right = 660.0
+margin_bottom = 26.0
+text = "mi ip :"
+align = 1
+
+[node name="nom_player" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+margin_top = 46.0
+margin_right = 660.0
+margin_bottom = 82.0
+align = 1
+placeholder_text = "ingresar Nombre de player"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 102.0
+margin_right = 660.0
+margin_bottom = 242.0
+custom_constants/separation = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 389.0
+margin_bottom = 140.0
+size_flags_horizontal = 3
+custom_constants/separation = 20
+
+[node name="ip_servidor" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_right = 389.0
+margin_bottom = 36.0
+text = "192.168.0.9"
+align = 1
+placeholder_text = "ingresar ip servidor"
+
+[node name="btn_crear_cliente" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 56.0
+margin_right = 389.0
+margin_bottom = 88.0
+text = "crear cliente"
+
+[node name="btn_desconectar_del_servidor" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 108.0
+margin_right = 389.0
+margin_bottom = 140.0
+text = "desconectar del servidor"
+
+[node name="btn_crear_servidor" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 409.0
+margin_right = 660.0
+margin_bottom = 140.0
+size_flags_horizontal = 3
+text = "crear servidor"
+
+[node name="Container_players" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 262.0
+margin_right = 660.0
+margin_bottom = 408.0
+size_flags_vertical = 3
+custom_constants/separation = 10
+alignment = 1
+
+[node name="Btn_empezar" type="Button" parent="MarginContainer/VBoxContainer"]
+margin_top = 428.0
+margin_right = 660.0
+margin_bottom = 460.0
+text = "empezar"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/btn_crear_cliente" to="." method="_on_btn_crear_cliente_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/btn_desconectar_del_servidor" to="." method="_on_btn_desconectar_del_servidor_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/btn_crear_servidor" to="." method="_on_btn_crear_servidor_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Btn_empezar" to="." method="_on_Btn_empezar_pressed"]
