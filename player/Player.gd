@@ -29,15 +29,21 @@ puppet func atacar():
 	$Ataque/Area2D.monitorable = false
 	$Ataque/Area2D.monitoring = false
 
-puppet func recibir_danio():
-	InfoPlayers.mi_info["vida"] -=  10
-	mostrar_datos(InfoPlayers.mi_info)
+puppet func recibir_danio(id):
+	print("DANNNiiioooo")
+	print("MI INFO: ",InfoPlayers.mi_info)
+	print("INFO PLAYERS: ",InfoPlayers.players_info)
+	
+#	InfoPlayers.players_info["vida"] -=  10
+	InfoPlayers.players_info[id]["vida"] -=  10
+	
+	mostrar_datos(InfoPlayers.players_info[id])
 
 func _on_Player_area_entered(area):
 	if self.is_network_master():
 		if area.is_in_group("ataque"):
-			recibir_danio()
-			rpc("recibir_danio")
+			recibir_danio(Network.mi_id)
+			rpc("recibir_danio", Network.mi_id)
 
 
 #master func recibir_danio():
@@ -48,8 +54,6 @@ func _on_Player_area_entered(area):
 #PEER
 puppet func actualizar_pos(pos):
 	self.global_position = pos
-
-
 
 #
 #puppet func danio_p():

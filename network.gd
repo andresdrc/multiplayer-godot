@@ -56,7 +56,7 @@ func crear_cliente():
 func _player_conectado(id):
 	print("El peer " + str(id) + " se a conectado al servidor")
 	
-	rpc_id(id, "instanciar_peer",InfoPlayers.mi_info)
+	rpc_id(id, "instanciar_peer",InfoPlayers.players_info[Network.mi_id])
 
 
 func _player_desconectado(id):
@@ -79,8 +79,10 @@ func _desconectado_del_servidor():
 
 func instanciar_mi_player(id, nom_player, vida):
 	UiNetwork.aniadir_player(id, nom_player, vida)
-	InfoPlayers.mi_info["nombre"] = nom_player
-	InfoPlayers.mi_info["vida"] = vida
+#	InfoPlayers.mi_info["nombre"] = nom_player
+#	InfoPlayers.mi_info["vida"] = vida
+	
+	InfoPlayers.players_info[id] = {"nombre" : nom_player, "vida" : vida}
 
 
 remote func instanciar_peer(info):
@@ -97,22 +99,24 @@ remotesync func pre_configurar_juego():
 	var mi_player = player.instance()
 	mi_player.set_name(str(Network.mi_id))
 	mi_player.set_network_master(Network.mi_id)
-	mi_player.mostrar_datos(InfoPlayers.mi_info)
+	mi_player.mostrar_datos(InfoPlayers.players_info[Network.mi_id])
 	Mundo.get_node("Players").add_child(mi_player)
 
 	# Load other players
-	for p in InfoPlayers.players_info:
-		var otro_player = player.instance()
-		otro_player.set_name(str(p))
-		otro_player.set_network_master(p)
-		otro_player.mostrar_datos(InfoPlayers.players_info[p])
-		Mundo.get_node("Players").add_child(otro_player)
+	for p in InfoPlayers.players_info :
+		if p != mi_id:
+			var otro_player = player.instance()
+			otro_player.set_name(str(p))
+			otro_player.set_network_master(p)
+			otro_player.mostrar_datos(InfoPlayers.players_info[p])
+			Mundo.get_node("Players").add_child(otro_player)
 	
 	print("termine PRE_CONFIGURAR_JUEGO")
 	rpc_id(1, "precofiguracion_terminada")
 
+
 remotesync func precofiguracion_terminada():
-	print("VERIFICANDO JUEGAODRES TEMINADOS")
+	print("VERIFICANDO JUGADORES TERMINADOS")
 	var player_conf = get_tree().get_rpc_sender_id()
 	
 	players_configurados.append(player_conf)
@@ -120,10 +124,11 @@ remotesync func precofiguracion_terminada():
 	print(InfoPlayers.players_info.size())
 	print(InfoPlayers.players_info)
 	
-	if players_configurados.size() == InfoPlayers.players_info.size()+1:
+	if players_configurados.size() == InfoPlayers.players_info.size():
 		rpc("post_configure_game")
-	
-	
+		print("aquiaquiaquiaqui")
+
+
 remotesync func post_configure_game():
 	if 1 == get_tree().get_rpc_sender_id():
 		get_tree().set_pause(false)
